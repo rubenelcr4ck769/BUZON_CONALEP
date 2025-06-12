@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONALEP 165 Tuxpan</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .logo-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .titulo-principal {
+            font-size: 2.5rem;
+            text-align: center;
+            color: #006341;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            margin: 30px auto;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 90%;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
+        }
+        .contenido-seccion {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px auto;
+            max-width: 1200px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 400px;
+            margin: 15px;
+            border-left: 6px solid #006341;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .card h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #006341;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            letter-spacing: 0.5px;
+        }
+        .card ul {
+            padding-left: 0;
+            list-style-type: none;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        .card li {
+            margin-bottom: 15px;
+            line-height: 1.7;
+            position: relative;
+            padding-left: 35px;
+        }
+        .vision li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23006341"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        .mision li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23006341"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        .valores li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23006341"><path d="M12 2L2 12l10 10 10-10z"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        .mapa-container {
+            text-align: center;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 800px;
+            border: 3px solid #006341;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 128, 43, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 128, 43, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 128, 43, 0); }
+        }
+        .mapa-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .galeria-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 30px auto;
+            max-width: 1200px;
+        }
+        .galeria-titulo {
+            font-size: 1.8rem;
+            text-align: center;
+            color: #006341;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #006341;
+            letter-spacing: 0.5px;
+        }
+        .galeria {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .galeria img, .galeria video {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            object-fit: cover;
+            width: 300px;
+            height: 300px;
+        }
+        .galeria img:hover, .galeria video:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            overflow: auto;
+        }
+        .modal-content {
+            display: block;
+            margin: 5% auto;
+            max-width: 80%;
+            max-height: 80vh;
+            border-radius: 10px;
+            animation: zoom 0.3s;
+        }
+        @keyframes zoom {
+            from { transform: scale(0.8); }
+            to { transform: scale(1); }
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close:hover {
+            color: #ff5252;
+        }
+        
+        /* SECCIÓN DE COMENTARIOS MEJORADA */
+        .seccion-comentarios {
+            background: linear-gradient(135deg, #006341 0%, #004d26 100%);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin: 50px auto;
+            max-width: 900px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .seccion-comentarios::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-radius: 20px;
+            z-index: 0;
+        }
+        
+        .seccion-comentarios h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        .comment-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        #comentario {
+            width: 100%;
+            height: 120px;
+            padding: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            resize: vertical;
+            background-color: rgba(255,255,255,0.95);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        #comentario:focus {
+            border-color: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+        }
+        
+        #publicar-btn {
+            width: 180px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            color: #006341;
+            font-size: 18px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            align-self: flex-end;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        #publicar-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        #comentarios-lista {
+            background: white;
+            width: 100%;
+            max-height: 500px;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-y: auto;
+            font-family: 'Roboto', sans-serif;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .comment {
+            background-color: #f8f9fa;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #006341;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+            position: relative;
+            font-size: 1rem;
+            line-height: 1.6;
+            transition: all 0.3s;
+        }
+        
+        .comment:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .comment-date {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: right;
+            margin-top: 10px;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        #comentarios-lista::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #comentarios-lista::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        #comentarios-lista::-webkit-scrollbar-thumb {
+            background: #006341;
+            border-radius: 10px;
+        }
+        
+        #comentarios-lista::-webkit-scrollbar-thumb:hover {
+            background: #004d26;
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+        
+        .error-message {
+            color: #ffeb3b;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Estilos del chatbot */
+        #chatbot-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #006341;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: botPulse 2s infinite;
+        }
+        #chatbot-btn img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        #chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 320px;
+            height: 400px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 999;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        #chat-header {
+            background: #006341;
+            color: white;
+            padding: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+            text-align: center;
+        }
+        #chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+        }
+        #chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+        #user-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: 'Roboto', sans-serif;
+        }
+        #chat-input button {
+            background: #006341;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin-left: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        @keyframes botPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0,99,65, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0,99,65, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,99,65, 0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .titulo-principal {
+                font-size: 1.8rem;
+            }
+            .card {
+                width: 90%;
+                margin: 15px auto;
+                padding: 20px;
+            }
+            .card h2 {
+                font-size: 1.5rem;
+            }
+            .card li {
+                font-size: 1rem;
+                padding-left: 30px;
+            }
+            .galeria img, .galeria video {
+                width: 100%;
+                max-width: 300px;
+            }
+            .logo-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            #chat-window {
+                width: 90%;
+                right: 5%;
+                bottom: 80px;
+            }
+            
+            .seccion-comentarios {
+                padding: 25px;
+                margin: 30px auto;
+            }
+            
+            .seccion-comentarios h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="logoq.jpeg" width="400" height="200" alt="Logo CONALEP">
+        <img src="logo2.jpeg" width="450" height="200" alt="Logo CONALEP">
+        <img src="sepi.png" width="400" height="100" alt="Logo SEPI">
+    </div>
+
+    <h1 class="titulo-principal">BIENVENIDO AL BUZÓN DE SUGERENCIAS DEL CONALEP 165</h1>
+    
+    <div class="contenido-seccion">
+        <section class="card vision">
+            <h2>Visión</h2>
+            <ul>
+                <li>Ser una institucion lider con enfoque loca,enfasis regional y presspectiva local,en la 
+                    formacion de profecionales tecnicos bachiller de exelencia y estandares nacionales e internacionales,
+                    que satisfasga a traves de saber y la innovacion,las necesidades de los sectores productivos y de servicios;
+                    favoreciendo la equidad,bienestar social ye el desarrollo sostenido del pais.
+
+                </li>
+                
+            </ul>
+        </section>
+        
+        <section class="card mision">
+            <h2>Misión</h2>
+            <ul>
+                <li>Fomar profecionales tecnicos bachiller altamente calificados,a traves de un modelo
+                    integral:competentes para la vida y competitivos en lo profecional.Trabajamos para garantizar 
+                    una educacion inclusiva,equitativa y de calidad;por medio de la capacitacion laboral,
+                    los servicios tecnologicos y la evaluacion para la certificacion de competencias,a traves de la vinculacion 
+                    permanente con los sectores productivos y de servicios para contribuir en la tranformacion y el desarrollo economico
+                    del estado de Veracruz y de Mexico 
+                </li>
+                
+            </ul>
+        </section>
+
+        <section class="card valores">
+            <h2>Valores</h2>
+            <ul>
+                <li>Calidad</li>
+                <li>Compromiso a la sociedad</li>
+                <li>Comunicación </li>
+                <li>Congruencia</li>
+                <li>Cooperacion</li>
+                <li>Equidad</li>
+                <li>Mentalidad positiva</li>
+                <li>Respeto a la persona</li>
+                <li>Responsabilidad</li>
+                <li>Superacion</li>
+
+            </ul>
+        </section>
+    </div>
+    
+    <div class="mapa-container">
+        <h2>Ubicación del Plantel CONALEP Tuxpan, Veracruz</h2>
+        <img src="ubi.png" alt="Ubicación CONALEP Tuxpan">
+    </div>
+
+    <h1 class="titulo-principal">GALERÍA DE ACTIVIDADES</h1>
+
+    <section class="galeria-section">
+        <h2 class="galeria-titulo">INFORMÁTICA</h2>
+        <div class="galeria">
+            <video width="300" height="300" controls>
+                <source src="carro.mp4" type="video/mp4">
+            </video>
+            <img src="CAR.jpeg" alt="Laboratorio Informática">
+            <img src="CARLOS.jpeg" alt="Estudiante Informática">
+            <img src="JUEGOS.jpeg" alt="Actividad Informática">
+            <img src="PIPI.jpeg" alt="Clases Informática">
+            <img src="carro ar.png" alt="Realidad Aumentada">
+        </div>
+    </section>
+
+    <section class="galeria-section">
+        <h2 class="galeria-titulo">ENFERMERÍA</h2>
+        <div class="galeria">
+            <img src="F1.png" alt="Laboratorio Enfermería">
+            <img src="F2.png" alt="Práctica Enfermería">
+            <img src="F3.png" alt="Alumnos Enfermería">
+            <img src="F4.png" alt="Simulación Enfermería">
+        </div>
+    </section>
+
+    <section class="galeria-section">
+        <h2 class="galeria-titulo">MOTORES A DIESEL</h2>
+        <div class="galeria">
+            <img src="m1.jpeg" alt="Motores 1">
+            <img src="m2.jpeg" alt="Motores 2">
+            <img src="m3.jpeg" alt="Motores 3">
+            <img src="m5.jpeg" alt="Motores 4">
+            <img src="m6.jpeg" alt="Motores 5">
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE COMENTARIOS MEJORADA -->
+    <section class="seccion-comentarios">
+        <h2>BUZÓN DE SUGERENCIAS</h2>
+        <p style="text-align: center; color: rgba(255,255,255,0.9); margin-bottom: 25px; font-size: 1.1rem;">
+            Comparte tus ideas, sugerencias o comentarios para mejorar nuestro plantel
+        </p>
+        
+        <div class="comment-box">
+            <textarea id="comentario" placeholder="Escribe aquí tu sugerencia o comentario..."></textarea>
+            <button id="publicar-btn">Enviar Sugerencia</button>
+            <div id="error-message" class="error-message"></div>
+        </div>
+        
+        <div id="comentarios-lista">
+            <div class="empty-message">Cargando comentarios...</div>
+        </div>
+    </section>
+
+    <div id="modal" class="modal">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <img class="modal-content" id="imgModal">
+    </div> 
+
+    <!-- Chatbot flotante con logo redondo -->
+    <div id="chatbot-btn">
+        <img src="logocona3.png" alt="Bot" />
+    </div>
+
+    <div id="chat-window">
+        <div id="chat-header">👩‍💻 Asistente CONALEP</div>
+        <div id="chat-body"></div>
+        <div id="chat-input">
+            <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+            <button onclick="enviarMensaje()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Firebase (REMPLAZA con tus datos reales)
+  const firebaseConfig = {
+  apiKey: "AIzaSyCt7bQO-WAKxxtGRMrRRQ-JEgB9XQARTSU",
+  authDomain: "undertale-web.firebaseapp.com",
+  databaseURL: "https://undertale-web-default-rtdb.firebaseio.com",
+  projectId: "undertale-web",
+  storageBucket: "undertale-web.firebasestorage.app",
+  messagingSenderId: "382838862726",
+  appId: "1:382838862726:web:bef77076da1fca2af6f207"
+};
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Función para formatear fecha
+        function formatearFecha(fecha) {
+            const opciones = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return fecha.toLocaleDateString('es-MX', opciones);
+        }
+
+        // Función para mostrar comentarios en tiempo real
+        function mostrarComentarios() {
+            const comentariosLista = document.getElementById('comentarios-lista');
+            
+            db.collection("comentarios").orderBy("fecha", "desc")
+                .onSnapshot((snapshot) => {
+                    comentariosLista.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        comentariosLista.innerHTML = '<div class="empty-message">No hay comentarios aún. ¡Sé el primero en comentar!</div>';
+                        return;
+                    }
+                    
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const fecha = data.fecha?.toDate() || new Date();
+                        
+                        const commentDiv = document.createElement('div');
+                        commentDiv.className = 'comment';
+                        commentDiv.innerHTML = `
+                            <div>${data.texto}</div>
+                            <div class="comment-date">${formatearFecha(fecha)}</div>
+                        `;
+                        
+                        comentariosLista.appendChild(commentDiv);
+                    });
+                }, (error) => {
+                    console.error("Error al cargar comentarios: ", error);
+                    comentariosLista.innerHTML = '<div class="empty-message error">Error al cargar comentarios. Intenta recargar la página.</div>';
+                });
+        }
+
+        // Función para publicar comentario
+        document.getElementById('publicar-btn').addEventListener('click', publicarComentario);
+
+        function publicarComentario() {
+            const comentarioTexto = document.getElementById('comentario').value.trim();
+            const errorMsg = document.getElementById('error-message');
+            
+            if (comentarioTexto === '') {
+                errorMsg.textContent = "Por favor escribe un comentario antes de enviar.";
+                return;
+            }
+            
+            errorMsg.textContent = "";
+            
+            db.collection("comentarios").add({
+                texto: comentarioTexto,
+                fecha: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                document.getElementById('comentario').value = '';
+            })
+            .catch((error) => {
+                console.error("Error al agregar comentario: ", error);
+                errorMsg.textContent = "Hubo un error al enviar tu comentario. Por favor intenta nuevamente.";
+            });
+        }
+
+        // Permitir enviar comentario con Enter (pero no con Shift+Enter)
+        document.getElementById('comentario').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                publicarComentario();
+            }
+        });
+
+        // Configuración del chatbot
+        const chatbotBtn = document.getElementById('chatbot-btn');
+        const chatWindow = document.getElementById('chat-window');
+        const chatBody = document.getElementById('chat-body');
+        const userInput = document.getElementById('user-input');
+
+        const preguntasFrecuentes = [
+            "¿Qué carreras ofrecen?",
+            "¿Cuál es el horario de atención?",
+            "¿Dónde están ubicados?",
+            "¿Cuáles son los requisitos de inscripción?",
+            "¿Tienen becas disponibles?"
+        ];
+
+        function iniciarChatbot() {
+            agregarMensaje('Bot', '¡Hola! 👋 Soy AsisConalep, tu asistente virtual del CONALEP 165 Tuxpan. ¿En qué puedo ayudarte hoy?', true);
+            
+            setTimeout(() => {
+                agregarMensaje('Bot', 'Puedes preguntarme sobre:', true);
+                
+                const preguntasContainer = document.createElement('div');
+                preguntasContainer.style.marginTop = '10px';
+                
+                preguntasFrecuentes.forEach(pregunta => {
+                    const btn = document.createElement('button');
+                    btn.textContent = pregunta;
+                    btn.style.display = 'block';
+                    btn.style.width = '100%';
+                    btn.style.margin = '5px 0';
+                    btn.style.padding = '8px';
+                    btn.style.backgroundColor = '#f0f8ff';
+                    btn.style.border = '1px solid #006341';
+                    btn.style.borderRadius = '6px';
+                    btn.style.cursor = 'pointer';
+                    btn.style.textAlign = 'left';
+                    btn.style.transition = 'all 0.3s';
+                    
+                    btn.onmouseover = () => {
+                        btn.style.backgroundColor = '#006341';
+                        btn.style.color = 'white';
+                    };
+                    
+                    btn.onmouseout = () => {
+                        btn.style.backgroundColor = '#f0f8ff';
+                        btn.style.color = 'inherit';
+                    };
+                    
+                    btn.onclick = () => {
+                        userInput.value = pregunta;
+                        enviarMensaje();
+                    };
+                    
+                    preguntasContainer.appendChild(btn);
+                });
+                
+                chatBody.appendChild(preguntasContainer);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 1000);
+        }
+
+        chatbotBtn.onclick = () => {
+            chatWindow.style.display = (chatWindow.style.display === 'flex') ? 'none' : 'flex';
+            if (chatWindow.style.display === 'flex' && chatBody.children.length === 0) {
+                iniciarChatbot();
+            }
+        };
+
+        function enviarMensaje() {
+            const texto = userInput.value.trim();
+            if (texto === '') return;
+
+            agregarMensaje('Tú', texto);
+            userInput.value = '';
+
+            const typingIndicator = document.createElement('div');
+            typingIndicator.id = 'typing-indicator';
+            typingIndicator.innerHTML = '<em>AsisConalep está escribiendo...</em>';
+            typingIndicator.style.color = '#666';
+            typingIndicator.style.fontStyle = 'italic';
+            typingIndicator.style.margin = '5px 0';
+            chatBody.appendChild(typingIndicator);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            setTimeout(() => {
+                document.getElementById('typing-indicator')?.remove();
+                agregarMensaje('Bot', generarRespuesta(texto), true);
+                
+                if (!texto.toLowerCase().includes('gracias') && !texto.toLowerCase().includes('adiós')) {
+                    setTimeout(() => {
+                        const ayudaDiv = document.createElement('div');
+                        ayudaDiv.style.marginTop = '10px';
+                        
+                        const btnAyuda = document.createElement('button');
+                        btnAyuda.textContent = '¿Necesitas ayuda con algo más?';
+                        btnAyuda.style.backgroundColor = '#006341';
+                        btnAyuda.style.color = 'white';
+                        btnAyuda.style.border = 'none';
+                        btnAyuda.style.padding = '8px 12px';
+                        btnAyuda.style.borderRadius = '6px';
+                        btnAyuda.style.cursor = 'pointer';
+                        
+                        btnAyuda.onclick = () => {
+                            iniciarChatbot();
+                        };
+                        
+                        ayudaDiv.appendChild(btnAyuda);
+                        chatBody.appendChild(ayudaDiv);
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    }, 500);
+                }
+            }, 1500);
+        }
+
+        function agregarMensaje(autor, mensaje, animado = false) {
+            const p = document.createElement('div');
+            p.style.margin = '8px 0';
+            p.style.padding = '8px 12px';
+            p.style.borderRadius = '12px';
+            p.style.maxWidth = '80%';
+            p.style.wordWrap = 'break-word';
+            
+            if (autor === 'Tú') {
+                p.style.backgroundColor = '#006341';
+                p.style.color = 'white';
+                p.style.marginLeft = 'auto';
+                p.style.borderBottomRightRadius = '4px';
+            } else {
+                p.style.backgroundColor = '#f0f8ff';
+                p.style.color = '#333';
+                p.style.marginRight = 'auto';
+                p.style.borderBottomLeftRadius = '4px';
+            }
+            
+            p.innerHTML = `<strong>${autor}:</strong> ${mensaje}`;
+            
+            if (animado) {
+                p.style.opacity = '0';
+                p.style.transform = 'translateY(10px)';
+                chatBody.appendChild(p);
+                setTimeout(() => {
+                    p.style.transition = 'all 0.3s ease';
+                    p.style.opacity = '1';
+                    p.style.transform = 'translateY(0)';
+                }, 50);
+            } else {
+                chatBody.appendChild(p);
+            }
+            
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function generarRespuesta(pregunta) {
+            const preguntaLC = pregunta.toLowerCase();
+            
+            if (preguntaLC.includes('hola') || preguntaLC.includes('buenos días') || 
+                preguntaLC.includes('buenas tardes') || preguntaLC.includes('buenas noches')) {
+                return '¡Hola! 😊 Soy AsisConalep, tu asistente virtual del CONALEP 165 Tuxpan. ¿En qué puedo ayudarte hoy?';
+            }
+            
+            if (preguntaLC.includes('adiós') || preguntaLC.includes('chao') || 
+                preguntaLC.includes('hasta luego') || preguntaLC.includes('nos vemos')) {
+                return '¡Hasta luego! ✨ Si necesitas algo más, aquí estaré para ayudarte. ¡Que tengas un excelente día!';
+            }
+            
+            if (preguntaLC.includes('quién eres') || preguntaLC.includes('qué eres') || 
+                preguntaLC.includes('tu nombre')) {
+                return 'Soy AsisConalep 🤖, tu asistente virtual del CONALEP 165. Fui creado para ayudarte con información sobre nuestra institución.';
+            }
+            
+            if (preguntaLC.includes('carreras') || preguntaLC.includes('oferta educativa') || 
+                preguntaLC.includes('qué estudiar')) {
+                return 'Ofrecemos tres carreras técnicas: <br><br>'
+                    + '💻 <strong>Informática</strong>: Desarrollo de software y redes <br>'
+                    + '❤ <strong>Enfermería General</strong>: Cuidado de pacientes <br>'
+                    + '🔧 <strong>Motores a Diesel</strong>: Mantenimiento automotriz <br><br>'
+                    + '¿Te gustaría más información sobre alguna en particular?';
+            }
+            
+            if (preguntaLC.includes('informática')) {
+                return '¡La carrera de Informática es fascinante! 💻<br><br>'
+                    + '<strong>Duración:</strong> 3 años<br>'
+                    + '<strong>Campo laboral:</strong> Desarrollo de software, redes computacionales, soporte técnico<br>'
+                    + '<strong>Ventajas:</strong> Alta demanda laboral, salarios competitivos<br><br>'
+                    + '¿Quieres saber sobre los horarios o requisitos?';
+            }
+            
+            if (preguntaLC.includes('enfermería')) {
+                return 'Enfermería General es una carrera con mucha vocación ❤<br><br>'
+                    + '<strong>Duración:</strong> 3 años<br>'
+                    + '<strong>Campo laboral:</strong> Hospitales, clínicas, atención domiciliaria<br>'
+                    + '<strong>Ventajas:</strong> Prácticas en hospitales reconocidos, alta empleabilidad<br><br>'
+                    + '¿Necesitas información sobre el proceso de admisión?';
+            }
+            
+            if (preguntaLC.includes('motores') || preguntaLC.includes('diesel')) {
+                return 'Motores a Diesel es ideal si te gusta la mecánica 🚗<br><br>'
+                    + '<strong>Duración:</strong> 3 años<br>'
+                    + '<strong>Campo laboral:</strong> Talleres mecánicos, empresas de transporte, mantenimiento industrial<br>'
+                    + '<strong>Ventajas:</strong> Talleres equipados con tecnología actual, alta demanda en el sector<br><br>'
+                    + '¿Te interesaría conocer los horarios de clases?';
+            }
+            
+            if (preguntaLC.includes('ubicación') || preguntaLC.includes('dirección') || 
+                preguntaLC.includes('dónde están') || preguntaLC.includes('cómo llegar')) {
+                return '📍 <strong>Dirección:</strong> Calle 2da general silva , Tuxpan, Veracruz<br><br>'
+                    + '🚗 Auto: Amplio estacionamiento disponible<br><br>'
+                    + '¿Quieres que te envíe la ubicación exacta por Google Maps?';
+            }
+            
+            if (preguntaLC.includes('horario') || preguntaLC.includes('horarios') || 
+                preguntaLC.includes('atención')) {
+                return '⏰ <strong>Horarios de atención:</strong><br><br>'
+                    + '<strong>Oficinas administrativas:</strong><br>'
+                    + 'Lunes a viernes: 8:00 am - 4:00 pm<br><br>'
+                    + '<strong>Clases:</strong><br>'
+                    + 'Matutino: 7:00 am - 2:00 pm<br>'
+                    + 'Vespertino: 2:00 pm - 9:00 pm<br><br>'
+                    + 'Para trámites específicos, recomiendo venir entre 9am y 2pm.';
+            }
+            
+            if (preguntaLC.includes('contacto') || preguntaLC.includes('teléfono') || 
+                preguntaLC.includes('correo')) {
+                return 
+                    + '📧 <strong>Email:</strong> conalep165@conalep.edu.mx<br>'
+                    + '🌐 <strong>Redes sociales:</strong> @Conalep165Tuxpan<br><br>'
+                    
+            }
+            
+            if (preguntaLC.includes('requisitos') || preguntaLC.includes('inscripción') || 
+                preguntaLC.includes('cómo inscribirme')) {
+                return '📋 <strong>Requisitos de inscripción:</strong><br><br>'
+                    + '1. Acta de nacimiento (original y copia)<br>'
+                    + '2. Certificado de secundaria (original y copia)<br>'
+                    + '3. CURP (copia)<br>'
+                    + '4. 6 fotografías tamaño infantil<br>'
+                    + '5. Comprobante de domicilio<br><br>'
+                    + 'El proceso toma aproximadamente 1 hora. ¿Necesitas información sobre costos?';
+            }
+            
+            if (preguntaLC.includes('becas') || preguntaLC.includes('apoyo económico')) {
+                return '🎓 <strong>Programas de becas disponibles:</strong><br><br>'
+                    + '• Beca CONALEP (para todos los estudiantes)<br>'
+                    + '• Beca Jóvenes Escribiendo el Futuro<br>'
+                    + '• Becas municipales<br>'
+                    + '• Apoyos a la excelencia académica<br><br>'
+                    + 'Los requisitos varían según el programa. ¿Te gustaría que te detalle los requisitos de alguna en particular?';
+            }
+            
+            if (preguntaLC.includes('directora') || preguntaLC.includes('quién dirige')) {
+                return '👨‍🏫 Nuestro plantel está bajo la dirección de la Lic. Patricia Cánovas, una profesional comprometida con la educación técnica de calidad.';
+            }
+            
+            if (preguntaLC.includes('historia') || preguntaLC.includes('cuándo fundaron')) {
+                return '🏫 El CONALEP 165 fue fundado en 1986. Desde entonces, hemos formado a miles de técnicos profesionales que hoy son orgullo de nuestra comunidad. ¡Somos parte fundamental de Tuxpan!';
+            }
+            
+            if (preguntaLC.includes('cómo estás') || preguntaLC.includes('qué tal')) {
+                return '¡Estoy muy bien, gracias por preguntar! 😊 Hoy estoy especialmente contento porque puedo ayudarte. ¿Y tú cómo estás?';
+            }
+            
+            if (preguntaLC.includes('edad') || preguntaLC.includes('cuántos años')) {
+                return 'Soy un proyecto relativamente nuevo 🎈, pero con mucha energía para ayudar. ¡Cada día aprendo algo nuevo gracias a preguntas como la tuya!';
+            }
+            
+            if (preguntaLC.includes('gracias') || preguntaLC.includes('mil gracias')) {
+                return '¡De nada! 😊 Es un placer ayudarte. No dudes en preguntarme cualquier otra cosa que necesites sobre el CONALEP 165.';
+            }
+            
+            return 'Vaya, esa es una pregunta interesante. 🤔 Como asistente virtual, mi conocimiento se centra en el CONALEP 165. ¿Quizás quisieras saber sobre:<br><br>'
+                + '- Nuestras carreras técnicas<br>'
+                + '- Proceso de inscripción<br>'
+                + '- Horarios y ubicación<br>'
+                + '- Becas y apoyos<br><br>'
+                + 'O tal vez prefieras seleccionar una de las opciones que te mostré al inicio.';
+        }
+
+        // Permitir enviar mensaje con Enter
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                enviarMensaje();
+            }
+        });
+
+        // Inicializar funciones
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarComentarios();
+        });
+    </script>
+
+
+
+
+
+
+
+
+  
+
+
+</body>
+</html>
